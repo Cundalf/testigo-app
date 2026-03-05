@@ -1,0 +1,13 @@
+services:
+  pocketbase:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: testigo-app
+    ports:
+      - "8090:8090"
+    volumes:
+      - ./pb_data:/app/pb_data
+    env_file:
+      - .env
+    restart: unless-stopped

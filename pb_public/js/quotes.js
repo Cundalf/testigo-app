@@ -1,0 +1,36 @@
+// =====================================================
+// TESTIGO — Stoic Quotes Data
+// =====================================================
+
+export const STOIC_QUOTES = [
+    { text: "La disciplina es el destino.", author: "Marco Aurelio" },
+    { text: "No es que tengamos poco tiempo, es que perdemos mucho.", author: "Séneca" },
+    { text: "Sufres más en la imaginación que en la realidad.", author: "Séneca" },
+    { text: "Lo que no te reta, no te cambia.", author: "Epicteto" },
+    { text: "La riqueza no consiste en tener posesiones, sino en tener pocos deseos.", author: "Epicteto" },
+    { text: "El impedimento para la acción hace avanzar la acción. Lo que se interpone en el camino se convierte en el camino.", author: "Marco Aurelio" },
+    { text: "Ten la voluntad de un fuego. No de una vela.", author: "Marco Aurelio" },
+    { text: "Quien vive temiendo, nunca será libre.", author: "Séneca" },
+    { text: "No expliques tu filosofía. Encárnala.", author: "Epicteto" },
+    { text: "La felicidad de tu vida depende de la calidad de tus pensamientos.", author: "Marco Aurelio" },
+    { text: "El hombre que ha anticipado la llegada de los problemas les quita su poder cuando llegan.", author: "Séneca" },
+    { text: "Primero di lo que serías; luego haz lo que tengas que hacer.", author: "Epicteto" },
+    { text: "Nada le sucede al hombre sabio contra su expectativa.", author: "Séneca" },
+    { text: "No busques que los eventos sucedan como deseas. Desea que sucedan como suceden.", author: "Epicteto" },
+    { text: "El mejor venganza es no ser como tu enemigo.", author: "Marco Aurelio" },
+    { text: "Difícil es la vida para quien la quiere fácil.", author: "Séneca" },
+    { text: "Haz cada acto como si fuera el último de tu vida.", author: "Marco Aurelio" },
+    { text: "No es lo que te sucede, sino cómo reaccionas a ello.", author: "Epicteto" },
+    { text: "La voluntad de ganar no significa nada sin la voluntad de prepararse.", author: "Epicteto" },
+    { text: "Mientras perdemos el tiempo dudando, la vida se escapa.", author: "Séneca" },
+    { text: "Controla tus percepciones. Dirige tus acciones. Acepta lo que no puedes controlar.", author: "Marco Aurelio" },
+    { text: "El que se irrita por las cosas no ha comprendido la vida.", author: "Marco Aurelio" },
+    { text: "Todo lo que escuchas es una opinión, no un hecho. Todo lo que ves es una perspectiva, no la verdad.", author: "Marco Aurelio" },
+    { text: "No te detengas. No te conformes. No retrocedas.", author: "Séneca" },
+    { text: "Si quieres progresar, acepta parecer ignorante en algunas cosas.", author: "Epicteto" },
+    { text: "La vida es larga si sabes usarla.", author: "Séneca" },
+    { text: "El obstáculo es el camino.", author: "Marco Aurelio" },
+    { text: "Cuelga tu hacha cada noche y vuelve a afilarla cada mañana.", author: "Proverbio Estoico" },
+    { text: "No pidas que lo que sucede suceda como quieres. Quiere que suceda como sucede y serás feliz.", author: "Epicteto" },
+    { text: "Memento mori.", author: "Tradición Estoica" },
+];

@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Testigo — La app de productividad que no te perdona. Un juez estoico para tu disciplina.">
+    <title>TESTIGO</title>
+
+    <!-- Pico CSS v2 -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css">
+
+    <!-- JetBrains Mono -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700;800&display=swap" rel="stylesheet">
+
+    <!-- App CSS -->
+    <link rel="stylesheet" href="/css/style.css">
+
+    <!-- Alpine.js -->
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+
+    <style>
+        [x-cloak] { display: none !important; }
+    </style>
+</head>
+<body x-data="testigoApp" x-init="init()">
+
+    <!-- Banner de castigo pendiente -->
+    <div id="punishment-banner" class="punishment-banner" x-show="pendingPunishments.length === 1 && !bannerClosed" x-cloak>
+        <div style="display:flex; justify-content:space-between; width:100%; align-items:center;">
+            <span x-text="'⚠ CASTIGO PENDIENTE: ' + (pendingPunishments[0]?.accion_correccion || '')"></span>
+            <button @click="bannerClosed = true" class="banner-close" style="background:none; border:none; color:white; font-size:1.5rem; cursor:pointer;">&times;</button>
+        </div>
+    </div>
+
+    <!-- Overlay de bloqueo total -->
+    <div id="block-overlay" class="block-overlay" x-show="pendingPunishments.length > 1" x-cloak>
+        <div class="block-overlay-content">
+            <h2>// BLOQUEADO</h2>
+            <p>Tienes castigos pendientes sin cumplir. No puedes continuar hasta resolver al menos uno.</p>
+            <div id="block-overlay-punishments">
+                <template x-for="p in pendingPunishments" :key="p.id">
+                    <div class="block-punishment-item">
+                        <span class="punishment-text" x-text="'⚡ ' + p.accion_correccion"></span>
+                        <button @click="markPunishmentDone(p.id)">MARCAR CUMPLIDO</button>
+                    </div>
+                </template>
+            </div>
+        </div>
+    </div>
+
+    <!-- App container -->
+    <main id="app" class="container">
+        <!-- LANDING VIEW -->
+        <template x-if="route === 'landing'">
+            <div class="landing">
+                <div class="landing-hero">
+                    <h1 class="landing-title">TESTIGO</h1>
+                    <p class="landing-subtitle">La app que no te perdona</p>
+                </div>
+
+                <div class="landing-quote" x-text="currentQuote"></div>
+
+                <div class="landing-divider"></div>
+
+                <div class="landing-manifesto">
+                    <p>Definís tus compromisos diarios. Sin excepción.</p>
+                    <p>Cada día, la app genera tus tareas. Sin negociación.</p>
+                    <p>Si fallás, escribís tu excusa. Sin escapatoria.</p>
+                    <p>Un juez estoico evalúa tu justificación. Sin piedad.</p>
+                    <p>Si tu excusa es débil, recibís un castigo. Sin apelación.</p>
+                </div>
+
+                <div class="landing-divider"></div>
+
+                <div class="landing-cta">
+                    <button @click="navigate('login')">ENTRAR</button>
+                </div>
+
+                <div style="margin-top:3rem; color:#333; font-size:0.65rem; text-transform:uppercase; letter-spacing:0.2em;">
+                    // Sin rachas. Sin badges. Sin motivación barata.
+                </div>
+            </div>
+        </template>
+
+        <!-- LOGIN VIEW -->
+        <template x-if="route === 'login'">
+            <div class="login-container">
+                <div class="login-box">
+                    <h1>TESTIGO</h1>
+                    <p class="login-sub">Identificate</p>
+                    
+                    <div id="login-form-area">
+                        <!-- Step Email -->
+                        <div x-show="loginStep === 'email'">
+                            <form @submit.prevent="handleEmailSubmit">
+                                <label for="login-email">Email</label>
+                                <input type="email" x-model="loginEmail" placeholder="tu@email.com" required>
+                                <button type="submit" :aria-busy="loading" :disabled="loading" style="width:100%; margin-top:0.5rem;">SOLICITAR CÓDIGO</button>
+                            </form>
+                        </div>
+
+                        <!-- Step OTP -->
+                        <div x-show="loginStep === 'otp'">
+                            <form @submit.prevent="handleOtpSubmit">
+                                <p style="font-size:0.8rem; color:#888; margin-bottom:1rem;">
+                                    Si el email está registrado, recibirás un código OTP.
+                                </p>
+                                <label for="login-otp">Código OTP</label>
+                                <input type="text" x-model="loginOtp" placeholder="Ingresá el código" required autocomplete="one-time-code">
+                                <button type="submit" :aria-busy="loading" :disabled="loading" style="width:100%; margin-top:0.5rem;">VERIFICAR</button>
+                                <div style="text-align:center; margin-top:1rem;">
+                                    <a href="#" @click.prevent="loginStep = 'email'; loginMessage = ''" style="font-size:0.7rem; color:#666;">Usar otro email</a>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+                    <div x-show="loginMessage" :class="'login-message ' + loginMessageType" x-text="loginMessage" x-cloak></div>
+
+                    <div class="login-back">
+                        <a href="#landing" @click.prevent="navigate('landing')">← Volver</a>
+                    </div>
+                </div>
+            </div>
+        </template>
+
+        <!-- DASHBOARD VIEW -->
+        <template x-if="route === 'dashboard'">
+            <div class="dashboard-wrapper">
+                <div class="dashboard-header">
+                    <div class="dashboard-header-left">
+                        <h1>TESTIGO</h1>
+                        <p class="dashboard-date" x-text="todayDateStr"></p>
+                        <p class="dashboard-quote" x-text="currentQuote"></p>
+                    </div>
+                    <div class="dashboard-header-right">
+                        <button class="secondary" @click="navigate('config')" title="Innegociables">⚙ CONTRATOS</button>
+                        <button class="outline" @click="logout()" title="Salir">SALIR</button>
+                    </div>
+                </div>
+
+                <div class="tab-nav">
+                    <button :class="{ active: activeTab === 'pendientes' }" @click="activeTab = 'pendientes'">
+                        DEBERES <span class="tab-count" x-text="dashboardData.pendientes.length">0</span>
+                    </button>
+                    <button :class="{ active: activeTab === 'cumplidos' }" @click="activeTab = 'cumplidos'">
+                        CUMPLIDO <span class="tab-count" x-text="dashboardData.cumplidos.length">0</span>
+                    </button>
+                    <button :class="{ active: activeTab === 'fallidos' }" @click="activeTab = 'fallidos'">
+                        FALLIDO <span class="tab-count" x-text="dashboardData.fallidos.length">0</span>
+                    </button>
+                </div>
+
+                <div class="dashboard-columns">
+                    <!-- Columnas se visualizan según el tab activo en mobile, o todas en desktop (según CSS actual) -->
+                    <div class="tab-content" :class="{ active: activeTab === 'pendientes' }">
+                        <div class="column-header">DEBERES</div>
+                        <div x-show="loadingData" class="loading">Cargando...</div>
+                        <div x-show="!loadingData && dashboardData.pendientes.length === 0" class="empty-state">No hay tareas pendientes</div>
+                        <ul class="task-list" x-show="!loadingData">
+                            <template x-for="r in dashboardData.pendientes" :key="r.id">
+                                <li class="task-item">
+                                    <div><span class="task-title" x-text="r.expand?.innegociable?.titulo || 'Tarea'"></span></div>
+                                    <div class="task-action">
+                                        <button class="btn-done" @click="markDone(r.id)">✓ HECHO</button>
+                                        <button class="btn-fail" @click="openExcuseModal(r.id, r.expand?.innegociable?.titulo)">✗ FALLÉ</button>
+                                    </div>
+                                </li>
+                            </template>
+                        </ul>
+                    </div>
+
+                    <div class="tab-content" :class="{ active: activeTab === 'cumplidos' }">
+                        <div class="column-header">CUMPLIDO</div>
+                        <div x-show="loadingData" class="loading">Cargando...</div>
+                        <div x-show="!loadingData && dashboardData.cumplidos.length === 0" class="empty-state">Nada cumplido aún</div>
+                        <ul class="task-list" x-show="!loadingData">
+                            <template x-for="r in dashboardData.cumplidos" :key="r.id">
+                                <li class="task-item completed">
+                                    <div><span class="task-title" x-text="r.expand?.innegociable?.titulo || 'Tarea'"></span></div>
+                                </li>
+                            </template>
+                        </ul>
+                    </div>
+
+                    <div class="tab-content" :class="{ active: activeTab === 'fallidos' }">
+                        <div class="column-header">FALLIDO</div>
+                        <div x-show="loadingData" class="loading">Cargando...</div>
+                        <div x-show="!loadingData && dashboardData.fallidos.length === 0" class="empty-state">Sin fallos. Por ahora.</div>
+                        <ul class="task-list" x-show="!loadingData">
+                            <template x-for="r in dashboardData.fallidos" :key="r.id">
+                                <li class="task-item failed">
+                                    <div>
+                                        <span class="task-title" x-text="r.expand?.innegociable?.titulo || 'Tarea'"></span>
+                                        <div class="task-excusa" x-show="r.excusa" x-text="'\'' + r.excusa + '\''"></div>
+                                    </div>
+                                </li>
+                            </template>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="espejo-section">
+                    <h2>// EL ESPEJO — HISTORIAL DE FRACASOS</h2>
+                    <div x-show="loadingEspejo" class="loading">Cargando...</div>
+                    <div x-show="!loadingEspejo && juicios.length === 0" class="empty-state">Sin fracasos registrados en los últimos 7 días.</div>
+                    <div id="espejo-list" x-show="!loadingEspejo">
+                        <template x-for="j in juicios" :key="j.id">
+                            <div class="espejo-entry">
+                                <span class="espejo-date" x-text="'[' + formatMiniDate(j.created) + ']'"></span>
+                                Fallaste en: <span class="espejo-task" x-text="j.expand?.registro_diario?.expand?.innegociable?.titulo || 'Tarea'"></span>.
+                                Tu excusa: <span class="espejo-excusa" x-text="'\'' + (j.expand?.registro_diario?.excusa || '—') + '\''"></span>
+                                <span class="espejo-veredicto" x-text="j.veredicto_ia"></span>
+                                <template x-if="j.accion_correccion">
+                                    <div>
+                                        <span class="espejo-correccion" x-text="'⚡ ' + j.accion_correccion"></span>
+                                        <button x-show="!j.castigo_cumplido" class="espejo-cumplido-btn" @click="markPunishmentDone(j.id)">MARCAR CASTIGO CUMPLIDO</button>
+                                    </div>
+                                </template>
+                            </div>
+                        </template>
+                    </div>
+                </div>
+            </div>
+        </template>
+
+        <!-- CONFIG VIEW -->
+        <template x-if="route === 'config'">
+            <div class="config-container">
+                <h1>// CONTRATOS</h1>
+                <p class="config-sub">Definí tus innegociables. Lo que prometés, se cumple.</p>
+
+                <div x-show="loadingConfig" class="loading">Cargando...</div>
+                <div x-show="!loadingConfig && innegociables.length === 0" class="empty-state">No tenés contratos definidos. Creá el primero.</div>
+                
+                <div id="innegociables-list" x-show="!loadingConfig">
+                    <template x-for="r in innegociables" :key="r.id">
+                        <div class="innegociable-item" :style="r.activo === false ? 'opacity:0.4;' : ''">
+                            <div class="inn-info">
+                                <div class="inn-title" x-text="r.titulo"></div>
+                                <div class="inn-days" x-text="formatFreq(r.frecuencia) + (r.activo === false ? ' — INACTIVO' : '')"></div>
+                            </div>
+                            <div class="inn-actions">
+                                <button @click="editInnegociable(r)">EDITAR</button>
+                                <button @click="toggleInnegociable(r)" x-text="r.activo === false ? 'ACTIVAR' : 'PAUSAR'"></button>
+                                <button @click="deleteInnegociable(r.id)" style="color:var(--color-fail);">BORRAR</button>
+                            </div>
+                        </div>
+                    </template>
+                </div>
+
+                <div class="innegociable-form" id="inn-form">
+                    <h3 x-text="innForm.id ? '// EDITAR CONTRATO' : '// NUEVO CONTRATO'"></h3>
+                    <label for="inn-titulo">Título</label>
+                    <input type="text" x-model="innForm.titulo" placeholder='Ej: "Trabajo Profundo (4hs)"' required :style="innForm.error ? 'border-color:var(--color-fail)' : ''">
+                    <label>Días de la semana</label>
+                    <div class="day-selector">
+                        <template x-for="(name, i) in dayNames" :key="i">
+                            <label>
+                                <input type="checkbox" :value="i" x-model="innForm.frecuencia">
+                                <span x-text="name"></span>
+                            </label>
+                        </template>
+                    </div>
+                    <div style="display:flex; gap:0.5rem;">
+                        <button @click="saveInnegociable()" :aria-busy="savingConfig" :disabled="savingConfig">GUARDAR</button>
+                        <button x-show="innForm.id" class="secondary" @click="resetInnForm()">CANCELAR</button>
+                    </div>
+                </div>
+
+                <div class="config-back">
+                    <a href="#dashboard" @click.prevent="navigate('dashboard')">← Volver al tablero</a>
+                </div>
+            </div>
+        </template>
+    </main>
+
+    <!-- Modal de excusa -->
+    <dialog id="excuse-modal" :open="excuseModal.open">
+        <article class="excuse-modal-content">
+            <header>
+                <h3>// JUSTIFICÁ TU FALLO</h3>
+            </header>
+            <p class="excuse-task-name" x-text="'Tarea: ' + excuseModal.taskTitle"></p>
+            <textarea x-model="excuseModal.text" placeholder="Escribí tu excusa. Sin ella, no podés marcar la tarea como fallida." rows="4" required :style="excuseModal.error ? 'border-color:var(--color-fail)' : ''"></textarea>
+            <footer>
+                <button class="secondary" @click="closeExcuseModal()">CANCELAR</button>
+                <button @click="submitExcuse()" :aria-busy="excuseModal.submitting" :disabled="excuseModal.submitting">ENVIAR AL JUEZ</button>
+            </footer>
+        </article>
+    </dialog>
+
+    <!-- PocketBase JS SDK -->
+    <script src="https://cdn.jsdelivr.net/gh/pocketbase/js-sdk@master/dist/pocketbase.umd.js"></script>
+
+    <!-- App Scripts -->
+    <script src="/js/quotes.js"></script>
+    <script src="/js/app.js"></script>
+</body>
+</html>

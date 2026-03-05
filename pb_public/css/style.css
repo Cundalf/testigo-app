@@ -1,0 +1,845 @@
+/* =====================================================
+   TESTIGO — Brutalista & Estoica
+   Override Pico CSS for raw, monochrome aesthetic
+   ===================================================== */
+
+/* --- Root Variables --- */
+:root {
+    --pico-font-family: 'JetBrains Mono', monospace;
+    --pico-font-size: 15px;
+    --pico-line-height: 1.6;
+    --pico-border-radius: 0;
+
+    /* Monochrome palette */
+    --pico-background-color: #0a0a0a;
+    --pico-color: #e0e0e0;
+    --pico-h1-color: #ffffff;
+    --pico-h2-color: #ffffff;
+    --pico-h3-color: #cccccc;
+    --pico-muted-color: #666666;
+    --pico-primary: #ffffff;
+    --pico-primary-hover: #cccccc;
+    --pico-primary-focus: rgba(255, 255, 255, 0.15);
+    --pico-primary-inverse: #0a0a0a;
+    --pico-secondary: #333333;
+    --pico-secondary-hover: #444444;
+    --pico-card-background-color: #111111;
+    --pico-card-border-color: #222222;
+
+    --border-brutal: 2px solid #333;
+    --border-accent: 2px solid #fff;
+    --color-fail: #ff3333;
+    --color-success: #4a4a4a;
+    --color-pending: #888888;
+}
+
+/* --- Global --- */
+* {
+    border-radius: 0 !important;
+}
+
+body {
+    background: var(--pico-background-color);
+    color: var(--pico-color);
+    font-family: var(--pico-font-family);
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: var(--pico-font-family);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    font-weight: 800;
+}
+
+/* --- Buttons --- */
+button, [role="button"], input[type="submit"] {
+    border-radius: 0 !important;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    font-weight: 700;
+    font-family: var(--pico-font-family);
+    border: var(--border-brutal);
+    transition: all 0.1s ease;
+}
+
+button:hover, [role="button"]:hover {
+    transform: translate(-1px, -1px);
+    box-shadow: 3px 3px 0 #fff;
+}
+
+button:active, [role="button"]:active {
+    transform: translate(0, 0);
+    box-shadow: none;
+}
+
+button.secondary {
+    background: transparent;
+    color: var(--pico-color);
+    border: var(--border-brutal);
+}
+
+/* --- Inputs --- */
+input, textarea, select {
+    border-radius: 0 !important;
+    border: var(--border-brutal) !important;
+    background: #0a0a0a !important;
+    color: var(--pico-color) !important;
+    font-family: var(--pico-font-family) !important;
+}
+
+input:focus, textarea:focus, select:focus {
+    border-color: #fff !important;
+    box-shadow: 0 0 0 1px #fff !important;
+}
+
+/* --- Cards --- */
+article {
+    border: var(--border-brutal);
+    background: var(--pico-card-background-color);
+    padding: 1.5rem;
+}
+
+/* --- Landing Page --- */
+.landing {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    padding: 2rem;
+    text-align: center;
+}
+
+.landing-hero {
+    max-width: 700px;
+    margin-bottom: 3rem;
+}
+
+.landing-title {
+    font-size: clamp(2.5rem, 8vw, 5rem);
+    font-weight: 800;
+    margin: 0;
+    line-height: 1.1;
+    letter-spacing: 0.15em;
+    color: #fff;
+}
+
+.landing-subtitle {
+    font-size: 0.9rem;
+    color: var(--pico-muted-color);
+    margin-top: 0.5rem;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+}
+
+.landing-quote {
+    font-size: 1.1rem;
+    font-style: italic;
+    color: #999;
+    margin: 2rem 0;
+    min-height: 3rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: opacity 0.6s ease;
+    padding: 0 1rem;
+}
+
+.landing-manifesto {
+    max-width: 600px;
+    text-align: left;
+    margin: 2rem auto;
+    border-left: 4px solid #fff;
+    padding-left: 1.5rem;
+}
+
+.landing-manifesto p {
+    font-size: 0.85rem;
+    color: #aaa;
+    margin: 0.5rem 0;
+    line-height: 1.8;
+}
+
+.landing-cta {
+    margin-top: 2rem;
+}
+
+.landing-cta button {
+    font-size: 1.1rem;
+    padding: 1rem 3rem;
+    background: #fff;
+    color: #0a0a0a;
+    border: none;
+    font-weight: 800;
+    letter-spacing: 0.2em;
+}
+
+.landing-cta button:hover {
+    background: #ccc;
+    color: #0a0a0a;
+}
+
+.landing-divider {
+    width: 60px;
+    height: 2px;
+    background: #333;
+    margin: 2rem auto;
+}
+
+/* --- Login Page --- */
+.login-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    padding: 2rem;
+}
+
+.login-box {
+    width: 100%;
+    max-width: 400px;
+}
+
+.login-box h1 {
+    text-align: center;
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+}
+
+.login-box .login-sub {
+    text-align: center;
+    color: var(--pico-muted-color);
+    font-size: 0.8rem;
+    margin-bottom: 2rem;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+}
+
+.login-message {
+    text-align: center;
+    font-size: 0.85rem;
+    margin: 1rem 0;
+    padding: 0.8rem;
+    border: 1px solid #333;
+}
+
+.login-message.success {
+    color: #aaa;
+    border-color: #444;
+}
+
+.login-message.error {
+    color: var(--color-fail);
+    border-color: var(--color-fail);
+}
+
+.login-back {
+    text-align: center;
+    margin-top: 1.5rem;
+}
+
+.login-back a {
+    color: var(--pico-muted-color);
+    font-size: 0.8rem;
+    text-decoration: none;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+}
+
+.login-back a:hover {
+    color: #fff;
+}
+
+/* --- Dashboard Header --- */
+.dashboard-header {
+    border-bottom: var(--border-brutal);
+    padding: 1rem 1.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.dashboard-header-left h1 {
+    font-size: 1.2rem;
+    margin: 0;
+}
+
+.dashboard-date {
+    font-size: 0.75rem;
+    color: var(--pico-muted-color);
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    margin: 0;
+}
+
+.dashboard-quote {
+    font-size: 0.75rem;
+    font-style: italic;
+    color: #666;
+    margin: 0;
+    transition: opacity 0.6s ease;
+}
+
+.dashboard-header-right {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+}
+
+.dashboard-header-right button {
+    font-size: 0.7rem;
+    padding: 0.4rem 0.8rem;
+    background: transparent;
+    color: var(--pico-color);
+    border: 1px solid #333;
+}
+
+.dashboard-header-right button:hover {
+    border-color: #fff;
+}
+
+/* --- Tab Navigation (Mobile-first) --- */
+.tab-nav {
+    display: flex;
+    border-bottom: var(--border-brutal);
+    background: #0d0d0d;
+}
+
+.tab-nav button {
+    flex: 1;
+    padding: 0.8rem;
+    background: transparent;
+    border: none;
+    border-bottom: 3px solid transparent;
+    color: var(--pico-muted-color);
+    font-size: 0.75rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    box-shadow: none;
+}
+
+.tab-nav button:hover {
+    color: #fff;
+    transform: none;
+    box-shadow: none;
+}
+
+.tab-nav button.active {
+    color: #fff;
+    border-bottom-color: #fff;
+    background: #111;
+}
+
+.tab-nav .tab-count {
+    display: inline-block;
+    font-size: 0.65rem;
+    margin-left: 0.3rem;
+    color: #555;
+}
+
+/* --- Task Columns --- */
+.tab-content {
+    display: none;
+    padding: 1rem;
+    min-height: 40vh;
+}
+
+.tab-content.active {
+    display: block;
+}
+
+.task-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.task-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.8rem 1rem;
+    border: 1px solid #1a1a1a;
+    margin-bottom: 0.5rem;
+    transition: all 0.15s ease;
+    cursor: pointer;
+}
+
+.task-item:hover {
+    border-color: #333;
+    background: #111;
+}
+
+.task-item .task-title {
+    font-size: 0.85rem;
+    font-weight: 500;
+}
+
+.task-item .task-action {
+    font-size: 0.65rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--pico-muted-color);
+    display: flex;
+    gap: 0.5rem;
+}
+
+.task-item .task-action button {
+    font-size: 0.65rem;
+    padding: 0.3rem 0.6rem;
+    border: 1px solid #333;
+    background: transparent;
+    color: var(--pico-color);
+}
+
+.task-item .task-action button.btn-fail {
+    color: var(--color-fail);
+    border-color: #550000;
+}
+
+.task-item .task-action button.btn-fail:hover {
+    background: #1a0000;
+    border-color: var(--color-fail);
+}
+
+.task-item .task-action button.btn-done {
+    color: #888;
+    border-color: #333;
+}
+
+.task-item .task-action button.btn-done:hover {
+    background: #1a1a1a;
+    border-color: #666;
+}
+
+/* Completed task style */
+.task-item.completed .task-title {
+    text-decoration: line-through;
+    color: var(--color-success);
+}
+
+/* Failed task style */
+.task-item.failed .task-title {
+    color: var(--color-fail);
+}
+
+.task-item.failed .task-excusa {
+    font-size: 0.7rem;
+    color: #666;
+    margin-top: 0.3rem;
+    font-style: italic;
+}
+
+.empty-state {
+    text-align: center;
+    padding: 3rem 1rem;
+    color: var(--pico-muted-color);
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+}
+
+/* --- El Espejo (Failure History) --- */
+.espejo-section {
+    border-top: var(--border-brutal);
+    padding: 1.5rem;
+    margin-top: 1rem;
+}
+
+.espejo-section h2 {
+    font-size: 0.9rem;
+    color: #666;
+    margin-bottom: 1rem;
+    letter-spacing: 0.2em;
+}
+
+.espejo-entry {
+    border-left: 3px solid #333;
+    padding: 0.8rem 1rem;
+    margin-bottom: 1rem;
+    font-size: 0.8rem;
+    line-height: 1.7;
+}
+
+.espejo-date {
+    color: var(--pico-muted-color);
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+}
+
+.espejo-task {
+    color: var(--color-fail);
+    font-weight: 700;
+}
+
+.espejo-excusa {
+    color: #888;
+    font-style: italic;
+}
+
+.espejo-veredicto {
+    color: #ccc;
+    margin-top: 0.3rem;
+    display: block;
+}
+
+.espejo-correccion {
+    color: #fff;
+    font-weight: 700;
+    display: block;
+    margin-top: 0.3rem;
+    padding: 0.4rem 0.6rem;
+    border: 1px solid #333;
+    background: #0d0d0d;
+}
+
+.espejo-cumplido-btn {
+    font-size: 0.65rem !important;
+    margin-top: 0.5rem;
+    padding: 0.3rem 0.6rem !important;
+}
+
+/* --- Excuse Modal --- */
+dialog {
+    background: #0a0a0a;
+    border: var(--border-accent);
+    color: var(--pico-color);
+    max-width: 500px;
+    width: 90%;
+}
+
+dialog::backdrop {
+    background: rgba(0, 0, 0, 0.85);
+}
+
+.excuse-modal-content header {
+    border-bottom: var(--border-brutal);
+    padding-bottom: 1rem;
+    margin-bottom: 1rem;
+}
+
+.excuse-modal-content header h3 {
+    margin: 0;
+    font-size: 1rem;
+    color: var(--color-fail);
+}
+
+.excuse-task-name {
+    font-size: 0.85rem;
+    color: #888;
+    margin-bottom: 1rem;
+}
+
+.excuse-modal-content textarea {
+    width: 100%;
+    resize: vertical;
+    min-height: 100px;
+}
+
+.excuse-modal-content footer {
+    display: flex;
+    gap: 0.5rem;
+    justify-content: flex-end;
+    border-top: var(--border-brutal);
+    padding-top: 1rem;
+    margin-top: 1rem;
+}
+
+.excuse-modal-content footer button {
+    font-size: 0.75rem;
+}
+
+/* --- Punishment Banner --- */
+.punishment-banner {
+    background: #1a0000;
+    border-bottom: 2px solid var(--color-fail);
+    padding: 0.6rem 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.75rem;
+    color: var(--color-fail);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+}
+
+.banner-close {
+    background: transparent !important;
+    border: none !important;
+    color: var(--color-fail) !important;
+    font-size: 1.2rem;
+    cursor: pointer;
+    padding: 0 0.5rem !important;
+    box-shadow: none !important;
+}
+
+.banner-close:hover {
+    color: #fff !important;
+    transform: none !important;
+    box-shadow: none !important;
+}
+
+/* --- Block Overlay --- */
+.block-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.95);
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.block-overlay-content {
+    text-align: center;
+    max-width: 500px;
+    padding: 2rem;
+}
+
+.block-overlay-content h2 {
+    color: var(--color-fail);
+    font-size: 2rem;
+    margin-bottom: 1rem;
+}
+
+.block-overlay-content p {
+    color: #888;
+    font-size: 0.85rem;
+}
+
+.block-punishment-item {
+    border: 1px solid #333;
+    padding: 0.8rem;
+    margin: 0.8rem 0;
+    text-align: left;
+    font-size: 0.8rem;
+}
+
+.block-punishment-item .punishment-text {
+    color: #ccc;
+    display: block;
+    margin-bottom: 0.5rem;
+}
+
+.block-punishment-item button {
+    font-size: 0.65rem;
+    padding: 0.3rem 0.8rem;
+}
+
+/* --- Config Page --- */
+.config-container {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 2rem 1.5rem;
+}
+
+.config-container h1 {
+    font-size: 1.2rem;
+    margin-bottom: 0.5rem;
+}
+
+.config-sub {
+    color: var(--pico-muted-color);
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    margin-bottom: 2rem;
+}
+
+.innegociable-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.8rem 1rem;
+    border: 1px solid #1a1a1a;
+    margin-bottom: 0.5rem;
+}
+
+.innegociable-item .inn-info {
+    flex: 1;
+}
+
+.innegociable-item .inn-title {
+    font-size: 0.85rem;
+    font-weight: 500;
+}
+
+.innegociable-item .inn-days {
+    font-size: 0.65rem;
+    color: var(--pico-muted-color);
+    margin-top: 0.2rem;
+}
+
+.innegociable-item .inn-actions {
+    display: flex;
+    gap: 0.3rem;
+}
+
+.innegociable-item .inn-actions button {
+    font-size: 0.6rem;
+    padding: 0.25rem 0.5rem;
+    border: 1px solid #333;
+    background: transparent;
+    color: var(--pico-muted-color);
+}
+
+.innegociable-form {
+    border: var(--border-brutal);
+    padding: 1.5rem;
+    margin-top: 1.5rem;
+}
+
+.innegociable-form h3 {
+    font-size: 0.85rem;
+    margin-bottom: 1rem;
+}
+
+.day-selector {
+    display: flex;
+    gap: 0.3rem;
+    margin: 0.5rem 0 1rem 0;
+    flex-wrap: wrap;
+}
+
+.day-selector label {
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    cursor: pointer;
+    padding: 0.3rem 0.5rem;
+    border: 1px solid #333;
+    transition: all 0.1s ease;
+}
+
+.day-selector label:has(input:checked) {
+    border-color: #fff;
+    background: #1a1a1a;
+    color: #fff;
+}
+
+.day-selector input[type="checkbox"] {
+    display: none;
+}
+
+.config-back {
+    margin-top: 2rem;
+    text-align: center;
+}
+
+.config-back a {
+    color: var(--pico-muted-color);
+    font-size: 0.75rem;
+    text-decoration: none;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+}
+
+.config-back a:hover {
+    color: #fff;
+}
+
+/* --- Fade animation for quotes --- */
+.quote-fade-out {
+    opacity: 0 !important;
+}
+
+.quote-fade-in {
+    opacity: 1 !important;
+}
+
+/* --- Loading state --- */
+.loading {
+    text-align: center;
+    padding: 2rem;
+    color: var(--pico-muted-color);
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+}
+
+.loading::after {
+    content: '';
+    display: inline-block;
+    width: 0.6rem;
+    height: 0.6rem;
+    border: 2px solid #333;
+    border-top-color: #fff;
+    animation: spin 0.6s linear infinite;
+    margin-left: 0.5rem;
+    vertical-align: middle;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+/* --- Desktop: 3-column layout for wider screens --- */
+@media (min-width: 900px) {
+    .tab-nav {
+        display: none;
+    }
+
+    .dashboard-columns {
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr;
+        gap: 0;
+        min-height: 50vh;
+    }
+
+    .tab-content {
+        display: block !important;
+        border-right: 1px solid #1a1a1a;
+    }
+
+    .tab-content:last-child {
+        border-right: none;
+    }
+
+    .column-header {
+        display: block !important;
+        font-size: 0.7rem;
+        text-transform: uppercase;
+        letter-spacing: 0.15em;
+        color: var(--pico-muted-color);
+        padding-bottom: 0.5rem;
+        border-bottom: 1px solid #1a1a1a;
+        margin-bottom: 0.5rem;
+        font-weight: 700;
+    }
+}
+
+.column-header {
+    display: none;
+}
+
+/* --- Scrollbar --- */
+::-webkit-scrollbar {
+    width: 6px;
+}
+
+::-webkit-scrollbar-track {
+    background: #0a0a0a;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #333;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}

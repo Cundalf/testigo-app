@@ -1,0 +1,14 @@
+{
+  "name": "testigo-app",
+  "version": "1.0.0",
+  "description": "Testigo — La app de productividad que no te perdona.",
+  "type": "module",
+  "scripts": {
+    "test": "vitest run"
+  },
+  "devDependencies": {
+    "vitest": "^1.0.0",
+    "happy-dom": "^13.0.0",
+    "@vitest/ui": "^1.0.0"
+  }
+}

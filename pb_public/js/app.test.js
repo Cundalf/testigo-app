@@ -14,6 +14,7 @@ const createPBMock = () => {
             collections[name] = {
                 requestOTP: vi.fn().mockResolvedValue({ otpId: 'otp-123' }),
                 authWithOTP: vi.fn().mockResolvedValue({}),
+                authWithOAuth2: vi.fn().mockResolvedValue({}),
                 getFullList: vi.fn().mockResolvedValue([]),
                 update: vi.fn().mockResolvedValue({}),
                 create: vi.fn().mockResolvedValue({}),
@@ -120,6 +121,25 @@ describe('Testigo Core Logic - Cobertura Total', () => {
 
             expect(app.loginMessageType).toBe('error');
             expect(app.loginMessage).toContain('inválido');
+        });
+
+        it('maneja login con Google OAuth exitoso', async () => {
+            const c = app.pb.collection('users');
+
+            await app.handleGoogleLogin();
+
+            expect(c.authWithOAuth2).toHaveBeenCalledWith({ provider: 'google' });
+            expect(window.location.hash).toBe('#dashboard');
+        });
+
+        it('maneja error en login con Google OAuth', async () => {
+            const c = app.pb.collection('users');
+            c.authWithOAuth2.mockRejectedValue(new Error('OAuth error'));
+
+            await app.handleGoogleLogin();
+
+            expect(app.loginMessageType).toBe('error');
+            expect(app.loginMessage).toContain('Error al iniciar sesión');
         });
     });
 
@@ -229,6 +249,24 @@ describe('Testigo Core Logic - Cobertura Total', () => {
         it('formatea la frecuencia de días correctamente', () => {
             expect(app.formatFreq([1, 2, 3])).toBe('Lun, Mar, Mié');
             expect(app.formatFreq([0, 6])).toBe('Dom, Sáb');
+        });
+    });
+});
+
+import { STOIC_QUOTES } from './quotes.js';
+
+describe('Quotes Module', () => {
+    it('should have an array of quotes', () => {
+        expect(Array.isArray(STOIC_QUOTES)).toBe(true);
+        expect(STOIC_QUOTES.length).toBeGreaterThan(0);
+    });
+
+    it('each quote should have text and author', () => {
+        STOIC_QUOTES.forEach(quote => {
+            expect(quote).toHaveProperty('text');
+            expect(quote).toHaveProperty('author');
+            expect(typeof quote.text).toBe('string');
+            expect(typeof quote.author).toBe('string');
         });
     });
 });

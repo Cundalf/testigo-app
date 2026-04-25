@@ -169,9 +169,23 @@ onBootstrap((e) => {
             needsSave = true;
         }
 
+        // Disable password authentication and ensure OTP/OAuth are enabled
+        if (usersCol.passwordAuth.enabled !== false) {
+            usersCol.passwordAuth.enabled = false;
+            needsSave = true;
+        }
+        if (usersCol.otp.enabled !== true) {
+            usersCol.otp.enabled = true;
+            needsSave = true;
+        }
+        if (usersCol.oauth2.enabled !== true) {
+            usersCol.oauth2.enabled = true;
+            needsSave = true;
+        }
+
         if (needsSave) {
             $app.save(usersCol);
-            console.log('[TESTIGO] Users collection updated with "alias" and "approved" fields.');
+            console.log('[TESTIGO] Users collection updated with "alias", "approved", and Auth settings.');
         }
     } catch (err) {
         console.error("[TESTIGO] Error updating users collection:", err);

@@ -1,6 +1,6 @@
 FROM alpine:3.19 AS downloader
 
-ARG PB_VERSION=0.25.9
+ARG PB_VERSION=0.37.3
 ARG TARGETARCH=amd64
 
 RUN apk add --no-cache wget unzip ca-certificates

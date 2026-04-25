@@ -9,6 +9,12 @@
     <!-- Pico CSS v2 -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css">
 
+    <!-- PWA y Favicons -->
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#000000">
+    <link rel="icon" type="image/svg+xml" href="/img/logo.svg">
+    <link rel="apple-touch-icon" href="/img/TestigoLogo512.png">
+
     <!-- JetBrains Mono -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -16,9 +22,6 @@
 
     <!-- App CSS -->
     <link rel="stylesheet" href="/css/style.css">
-
-    <!-- Alpine.js -->
-    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
 
     <style>
         [x-cloak] { display: none !important; }
@@ -92,13 +95,20 @@
                     <p class="login-sub">Identificate</p>
                     
                     <div id="login-form-area">
-                        <!-- Step Email -->
+                        <!-- Step Email or Google -->
                         <div x-show="loginStep === 'email'">
                             <form @submit.prevent="handleEmailSubmit">
                                 <label for="login-email">Email</label>
                                 <input type="email" x-model="loginEmail" placeholder="tu@email.com" required>
-                                <button type="submit" :aria-busy="loading" :disabled="loading" style="width:100%; margin-top:0.5rem;">SOLICITAR CÓDIGO</button>
+                                <button type="submit" :aria-busy="loading" :disabled="loading" style="width:100%; margin-top:0.5rem;">INGRESAR CON OTP</button>
                             </form>
+                            
+                            <div style="text-align:center; margin: 1.5rem 0; position: relative;">
+                                <hr style="border-color: #333;">
+                                <span style="position: absolute; top: -0.8rem; left: 50%; transform: translateX(-50%); background: var(--pico-background-color); padding: 0 0.5rem; color: #888; font-size: 0.8rem;">O</span>
+                            </div>
+
+                            <button @click="handleGoogleLogin" class="secondary outline" :aria-busy="loading" :disabled="loading" style="width:100%;">CONTINUAR CON GOOGLE</button>
                         </div>
 
                         <!-- Step OTP -->
@@ -296,7 +306,20 @@
     <script src="https://cdn.jsdelivr.net/gh/pocketbase/js-sdk@master/dist/pocketbase.umd.js"></script>
 
     <!-- App Scripts -->
-    <script src="/js/quotes.js"></script>
-    <script src="/js/app.js"></script>
+    <script type="module" src="/js/quotes.js"></script>
+    <script type="module" src="/js/app.js"></script>
+    
+    <!-- Alpine.js (después de app.js para preservar orden de eventos module/defer) -->
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+
+    <!-- PWA Service Worker -->
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/sw.js')
+                .catch(err => console.error('ServiceWorker registration failed: ', err));
+            });
+        }
+    </script>
 </body>
 </html>

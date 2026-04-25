@@ -10,7 +10,8 @@ const pbCheck = typeof PocketBase !== 'undefined' ? new PocketBase(window.locati
 export const testigoApp = () => ({
     // --- State ---
     route: 'landing',
-    pb: pbCheck,
+    get pb() { return this._mockPb || pbCheck; },
+    set pb(v) { this._mockPb = v; },
     loading: false,
 
     // Auth
@@ -109,6 +110,21 @@ export const testigoApp = () => ({
     },
 
     // --- Auth methods ---
+    async handleGoogleLogin() {
+        this.loading = true;
+        this.loginMessage = '';
+        try {
+            await this.pb.collection("users").authWithOAuth2({ provider: "google" });
+            this.navigate('dashboard');
+        } catch (err) {
+            console.error(err);
+            this.loginMessage = "Error al iniciar sesión con Google.";
+            this.loginMessageType = "error";
+        } finally {
+            this.loading = false;
+        }
+    },
+
     async handleEmailSubmit() {
         if (!this.loginEmail) return;
         this.loading = true;
@@ -369,9 +385,16 @@ export const testigoApp = () => ({
     }
 });
 
+// Exponer globalmente para Alpine cuando app.js es un módulo
+if (typeof window !== 'undefined') {
+    window.testigoApp = testigoApp;
+}
+
 // Registrar en Alpine si estamos en el navegador
-if (typeof Alpine !== 'undefined') {
+if (typeof document !== 'undefined') {
     document.addEventListener('alpine:init', () => {
-        Alpine.data('testigoApp', testigoApp);
+        if (typeof Alpine !== 'undefined') {
+            Alpine.data('testigoApp', testigoApp);
+        }
     });
 }
